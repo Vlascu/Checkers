@@ -10,16 +10,22 @@ namespace Checkers.Viewmodels.Entities
     {
         private static readonly byte NUMBER_OF_ROWS = 8;
         private static readonly byte NUMBER_OF_COLUMNS = 8;
+        private static readonly byte WHITE_PIECE = (byte)PieceTypes.WHITE_PIECE;
+        private static readonly byte WHITE_KING = (byte)PieceTypes.WHITE_KING;
+        private static readonly byte RED_PIECE = (byte)PieceTypes.RED_PIECE;
+        private static readonly byte RED_KING = (byte)PieceTypes.RED_KING;
+        private static readonly byte EMPTY = (byte)PieceTypes.EMPTY;
+
         private byte[,] boardMatrix;
         private byte numberOfRedPieces;
         private byte numberOfWhitePieces;
 
-        Board(byte option)
+        public Board(byte buildOption)
         {
             numberOfWhitePieces = 0;
             numberOfRedPieces = 0;
             boardMatrix = new byte[NUMBER_OF_ROWS, NUMBER_OF_COLUMNS];
-            InitMatrix(option);
+            InitMatrix(buildOption);
         }
 
         public List<Tuple<byte, byte>> GetAvailableMoves(byte row, byte column)
@@ -27,22 +33,22 @@ namespace Checkers.Viewmodels.Entities
             List<Tuple<byte, byte>> possibleMoves = new List<Tuple<byte, byte>>();
 
             byte pieceValue = boardMatrix[row, column];
-            if (pieceValue == 3 || pieceValue == 4)
+            if (pieceValue == WHITE_KING || pieceValue == RED_KING)
             {
-                if (pieceValue == 3)
-                    AddKingMoves(row, column, 2, 4, possibleMoves);
-                else if (pieceValue == 4)
-                    AddKingMoves(row, column, 1, 3, possibleMoves);
+                if (pieceValue == WHITE_KING)
+                    AddKingMoves(row, column, RED_PIECE, RED_KING, possibleMoves);
+                else if (pieceValue == RED_KING)
+                    AddKingMoves(row, column, WHITE_PIECE, WHITE_KING, possibleMoves);
             }
-            else if (pieceValue == 1 || pieceValue == 2)
+            else if (pieceValue == WHITE_PIECE || pieceValue == RED_PIECE)
             {
-                byte opponentPieceValue = (byte)(pieceValue == 1 ? 2 : 1);
+                byte opponentPieceValue = (byte)(pieceValue == WHITE_PIECE ? RED_PIECE : WHITE_PIECE);
                 AddRegularPieceMoves(row, column, opponentPieceValue, possibleMoves);
             }
 
             return possibleMoves;
         }
-        
+
         private void AddKingMoves(byte row, byte column, byte opponentPiece, byte opponentKing, List<Tuple<byte, byte>> possibleMoves)
         {
             AddDiagonalMove(row, column, -1, -1, opponentPiece, opponentKing, possibleMoves);
@@ -112,19 +118,19 @@ namespace Checkers.Viewmodels.Entities
                 {
                     if (rowIndex == 0 && columnIndex % 2 == 1)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 1;
+                        boardMatrix[rowIndex, columnIndex] = WHITE_PIECE;
                         numberOfWhitePieces++;
                     }
 
                     else if (rowIndex == NUMBER_OF_ROWS - 1 && columnIndex % 2 == 0)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 2;
+                        boardMatrix[rowIndex, columnIndex] = RED_PIECE;
                         numberOfRedPieces++;
                     }
 
                     else
                     {
-                        boardMatrix[rowIndex, columnIndex] = 0;
+                        boardMatrix[rowIndex, columnIndex] = EMPTY;
                     }
                 }
             }
@@ -138,29 +144,29 @@ namespace Checkers.Viewmodels.Entities
                 {
                     if (rowIndex == 0 && columnIndex % 2 == 1)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 1;
+                        boardMatrix[rowIndex, columnIndex] = WHITE_PIECE;
                         numberOfWhitePieces++;
                     }
                     else if (rowIndex == 1 && columnIndex % 2 == 0)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 1;
+                        boardMatrix[rowIndex, columnIndex] = WHITE_PIECE;
                         numberOfWhitePieces++;
                     }
 
                     else if (rowIndex == NUMBER_OF_ROWS - 1 && columnIndex % 2 == 0)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 2;
+                        boardMatrix[rowIndex, columnIndex] = RED_PIECE;
                         numberOfRedPieces++;
                     }
                     else if (rowIndex == NUMBER_OF_ROWS - 2 && columnIndex % 2 == 1)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 2;
+                        boardMatrix[rowIndex, columnIndex] = RED_PIECE;
                         numberOfRedPieces++;
                     }
 
                     else
                     {
-                        boardMatrix[rowIndex, columnIndex] = 0;
+                        boardMatrix[rowIndex, columnIndex] = EMPTY;
                     }
                 }
             }
@@ -174,39 +180,39 @@ namespace Checkers.Viewmodels.Entities
                 {
                     if (rowIndex == 0 && columnIndex % 2 == 1)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 1;
+                        boardMatrix[rowIndex, columnIndex] = WHITE_PIECE;
                         numberOfWhitePieces++;
                     }
                     else if (rowIndex == 1 && columnIndex % 2 == 0)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 1;
+                        boardMatrix[rowIndex, columnIndex] = WHITE_PIECE;
                         numberOfWhitePieces++;
                     }
                     else if (rowIndex == 2 && columnIndex % 2 == 1)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 1;
+                        boardMatrix[rowIndex, columnIndex] = WHITE_PIECE;
                         numberOfWhitePieces++;
                     }
 
                     else if (rowIndex == NUMBER_OF_ROWS - 1 && columnIndex % 2 == 0)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 2;
+                        boardMatrix[rowIndex, columnIndex] = RED_PIECE;
                         numberOfRedPieces++;
                     }
                     else if (rowIndex == NUMBER_OF_ROWS - 2 && columnIndex % 2 == 1)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 2;
+                        boardMatrix[rowIndex, columnIndex] = RED_PIECE;
                         numberOfRedPieces++;
                     }
                     else if (rowIndex == NUMBER_OF_ROWS - 3 && columnIndex % 2 == 0)
                     {
-                        boardMatrix[rowIndex, columnIndex] = 2;
+                        boardMatrix[rowIndex, columnIndex] = RED_PIECE;
                         numberOfRedPieces++;
                     }
 
                     else
                     {
-                        boardMatrix[rowIndex, columnIndex] = 0;
+                        boardMatrix[rowIndex, columnIndex] = EMPTY;
                     }
                 }
             }
@@ -271,13 +277,27 @@ namespace Checkers.Viewmodels.Entities
 
                 if (boardMatrix[rowDiag, colDiag] != 0)
                 {
-                    boardMatrix[rowDiag, colDiag] = 0;
+                    boardMatrix[rowDiag, colDiag] = EMPTY;
                 }
             }
 
-            boardMatrix[rowDest, columnDest] = movingPiece;
+            if (rowDest == 0 || rowDest == NUMBER_OF_ROWS - 1)
+            {
+                if (movingPiece == WHITE_PIECE)
+                {
+                    boardMatrix[rowDest, columnDest] = WHITE_KING;
+                }
+                else if (movingPiece == RED_PIECE)
+                {
+                    boardMatrix[rowDest, columnDest] = RED_KING;
+                }
+            }
+            else
+            {
+                boardMatrix[rowDest, columnDest] = movingPiece;
+            }
 
-            boardMatrix[rowSource, columnSource] = 0;
+            boardMatrix[rowSource, columnSource] = EMPTY;
         }
 
         public byte GetPieceType(byte row, byte column)
