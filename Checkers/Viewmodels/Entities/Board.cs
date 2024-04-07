@@ -24,225 +24,65 @@ namespace Checkers.Viewmodels.Entities
 
         public List<Tuple<byte, byte>> GetAvailableMoves(byte row, byte column)
         {
-            List<Tuple<byte, byte>> possbileMoves = new List<Tuple<byte, byte>>();
+            List<Tuple<byte, byte>> possibleMoves = new List<Tuple<byte, byte>>();
 
-            if (boardMatrix[row, column] == 3 || boardMatrix[row, column] == 4)
+            byte pieceValue = boardMatrix[row, column];
+            if (pieceValue == 3 || pieceValue == 4)
             {
-                if (boardMatrix[row, column] == 3)
-                {
-                    //Top-left
-                    if (row > 0 && column > 0)
-                    {
-                        if (boardMatrix[row - 1, column - 1] == 0)
-                        {
-                            possbileMoves.Add(Tuple.Create((byte)(row - 1), (byte)(column - 1)));
-                        }
-                        else if (row > 1 && column > 1 && (boardMatrix[row - 1, column - 1] == 2 || boardMatrix[row - 1, column - 1] == 4))
-                        {
-                            if (boardMatrix[row - 2, column - 2] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row - 2), (byte)(column - 2)));
-                            }
-                        }
-                    }
-
-                    // Top-right
-                    if (row > 0 && column < NUMBER_OF_COLUMNS - 1)
-                    {
-                        if (boardMatrix[row - 1, column + 1] == 0)
-                        {
-                            possbileMoves.Add(Tuple.Create((byte)(row - 1), (byte)(column + 1)));
-                        }
-                        else if (row > 1 && column < NUMBER_OF_COLUMNS - 2 && (boardMatrix[row - 1, column + 1] == 2 || boardMatrix[row - 1, column + 1] == 4))
-                        {
-                            if (boardMatrix[row - 2, column + 2] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row - 2), (byte)(column + 2)));
-                            }
-                        }
-                    }
-
-                    // Bottom-left
-                    if (row < NUMBER_OF_ROWS - 1 && column > 0)
-                    {
-                        if (boardMatrix[row + 1, column - 1] == 0)
-                        {
-                            possbileMoves.Add(Tuple.Create((byte)(row + 1), (byte)(column - 1)));
-                        }
-                        else if (row < NUMBER_OF_ROWS - 2 && column > 1 && (boardMatrix[row + 1, column - 1] == 2 || boardMatrix[row + 1, column - 1] == 4))
-                        {
-                            if (boardMatrix[row + 2, column - 2] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row + 2), (byte)(column - 2)));
-                            }
-                        }
-                    }
-
-                    // Bottom-right
-                    if (row < NUMBER_OF_ROWS - 1 && column < NUMBER_OF_COLUMNS - 1)
-                    {
-                        if (boardMatrix[row + 1, column + 1] == 0)
-                        {
-                            possbileMoves.Add(Tuple.Create((byte)(row + 1), (byte)(column + 1)));
-                        }
-                        else if (row < NUMBER_OF_ROWS - 2 && column < NUMBER_OF_COLUMNS - 2 && (boardMatrix[row + 1, column + 1] == 2 || boardMatrix[row + 1, column + 1] == 4))
-                        {
-                            if (boardMatrix[row + 2, column + 2] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row + 2), (byte)(column + 2)));
-                            }
-                        }
-                    }
-                } else if (boardMatrix[row, column] == 4)
-                {
-                    if (row > 0 && column > 0)
-                    {
-                        if (boardMatrix[row - 1, column - 1] == 0)
-                        {
-                            possbileMoves.Add(Tuple.Create((byte)(row - 1), (byte)(column - 1)));
-                        }
-                        else if (row > 1 && column > 1 && (boardMatrix[row - 1, column - 1] == 1 || boardMatrix[row - 1, column - 1] == 3))
-                        {
-                            if (boardMatrix[row - 2, column - 2] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row - 2), (byte)(column - 2)));
-                            }
-                        }
-                    }
-
-                    // Top-right
-                    if (row > 0 && column < NUMBER_OF_COLUMNS - 1)
-                    {
-                        if (boardMatrix[row - 1, column + 1] == 0)
-                        {
-                            possbileMoves.Add(Tuple.Create((byte)(row - 1), (byte)(column + 1)));
-                        }
-                        else if (row > 1 && column < NUMBER_OF_COLUMNS - 2 && (boardMatrix[row - 1, column + 1] == 1 || boardMatrix[row - 1, column + 1] == 3))
-                        {
-                            if (boardMatrix[row - 2, column + 2] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row - 2), (byte)(column + 2)));
-                            }
-                        }
-                    }
-
-                    // Bottom-left
-                    if (row < NUMBER_OF_ROWS - 1 && column > 0)
-                    {
-                        if (boardMatrix[row + 1, column - 1] == 0)
-                        {
-                            possbileMoves.Add(Tuple.Create((byte)(row + 1), (byte)(column - 1)));
-                        }
-                        else if (row < NUMBER_OF_ROWS - 2 && column > 1 && (boardMatrix[row + 1, column - 1] == 1 || boardMatrix[row + 1, column - 1] == 3))
-                        {
-                            if (boardMatrix[row + 2, column - 2] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row + 2), (byte)(column - 2)));
-                            }
-                        }
-                    }
-
-                    // Bottom-right
-                    if (row < NUMBER_OF_ROWS - 1 && column < NUMBER_OF_COLUMNS - 1)
-                    {
-                        if (boardMatrix[row + 1, column + 1] == 0)
-                        {
-                            possbileMoves.Add(Tuple.Create((byte)(row + 1), (byte)(column + 1)));
-                        }
-                        else if (row < NUMBER_OF_ROWS - 2 && column < NUMBER_OF_COLUMNS - 2 && (boardMatrix[row + 1, column + 1] == 1 || boardMatrix[row + 1, column + 1] == 3))
-                        {
-                            if (boardMatrix[row + 2, column + 2] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row + 2), (byte)(column + 2)));
-                            }
-                        }
-                    }
-                }
+                if (pieceValue == 3)
+                    AddKingMoves(row, column, 2, 4, possibleMoves);
+                else if (pieceValue == 4)
+                    AddKingMoves(row, column, 1, 3, possibleMoves);
             }
-            else
+            else if (pieceValue == 1 || pieceValue == 2)
             {
-                //White piece check
-                if (boardMatrix[row, column] == 1)
-                {
-                    if (row < NUMBER_OF_ROWS - 1)
-                    {
-                        //Left side checking
-                        if (column - 1 > -1)
-                        {
-                            if (boardMatrix[row + 1, column - 1] == 2 || boardMatrix[row + 1, column - 1] == 4)
-                            {
-                                if (column - 2 > -1 && row < NUMBER_OF_ROWS - 2 && boardMatrix[row + 2, column - 2] == 0)
-                                {
-                                    possbileMoves.Add(Tuple.Create((byte)(row + 2), (byte)(column - 2)));
-                                }
-                            }
-                            else if (boardMatrix[row + 1, column - 1] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row + 1), (byte)(column - 1)));
-                            }
-                        }
-
-                        //Right side checking
-                        if (column + 1 < NUMBER_OF_COLUMNS)
-                        {
-                            if (boardMatrix[row + 1, column + 1] == 2 || boardMatrix[row + 1, column - 1] == 4)
-                            {
-                                if (column + 2 < NUMBER_OF_COLUMNS && row < NUMBER_OF_ROWS - 2 && boardMatrix[row + 2, column + 2] == 0)
-                                {
-                                    possbileMoves.Add(Tuple.Create((byte)(row + 2), (byte)(column + 2)));
-                                }
-                            }
-                            else if (boardMatrix[row + 1, column + 1] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row + 1), (byte)(column + 1)));
-                            }
-                        }
-                    }
-
-                }
-
-                //Red piece check
-                if (boardMatrix[row, column] == 2)
-                {
-                    if (row > 0)
-                    {
-                        //Left side checking
-                        if (column - 1 > -1)
-                        {
-                            if (boardMatrix[row - 1, column - 1] == 1 || boardMatrix[row - 1, column - 1] == 3)
-                            {
-                                if (column - 2 > -1 && row > 1 && boardMatrix[row - 2, column - 2] == 0)
-                                {
-                                    possbileMoves.Add(Tuple.Create((byte)(row - 2), (byte)(column - 2)));
-                                }
-                            }
-                            else if (boardMatrix[row - 1, column - 1] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row - 1), (byte)(column - 1)));
-                            }
-                        }
-
-                        //Right side checking
-                        if (column + 1 < NUMBER_OF_COLUMNS)
-                        {
-                            if (boardMatrix[row - 1, column + 1] == 1 || boardMatrix[row - 1, column + 1] == 3)
-                            {
-                                if (column + 2 < NUMBER_OF_COLUMNS && row > 1 && boardMatrix[row - 2, column + 2] == 0)
-                                {
-                                    possbileMoves.Add(Tuple.Create((byte)(row - 2), (byte)(column + 2)));
-                                }
-                            }
-                            else if (boardMatrix[row - 1, column + 1] == 0)
-                            {
-                                possbileMoves.Add(Tuple.Create((byte)(row - 1), (byte)(column + 1)));
-                            }
-                        }
-                    }
-                }
+                byte opponentPieceValue = (byte)(pieceValue == 1 ? 2 : 1);
+                AddRegularPieceMoves(row, column, opponentPieceValue, possibleMoves);
             }
 
-            return possbileMoves;
+            return possibleMoves;
         }
+
+        private void AddKingMoves(byte row, byte column, byte opponentPiece, byte opponentKing, List<Tuple<byte, byte>> possibleMoves)
+        {
+            AddDiagonalMove(row, column, -1, -1, opponentPiece, opponentKing, possibleMoves);
+            AddDiagonalMove(row, column, -1, 1, opponentPiece, opponentKing, possibleMoves);
+            AddDiagonalMove(row, column, 1, -1, opponentPiece, opponentKing, possibleMoves);
+            AddDiagonalMove(row, column, 1, 1, opponentPiece, opponentKing, possibleMoves);
+        }
+
+        private void AddRegularPieceMoves(byte row, byte column, byte opponentPiece, List<Tuple<byte, byte>> possibleMoves)
+        {
+            AddDiagonalMove(row, column, 1, -1, opponentPiece, 0, possibleMoves);
+            AddDiagonalMove(row, column, 1, 1, opponentPiece, 0, possibleMoves);
+        }
+
+        private void AddDiagonalMove(byte row, byte column, int rowDirection, int columnDirection, byte opponentPiece, byte opponentKing, List<Tuple<byte, byte>> possibleMoves)
+        {
+            int newRow = row + rowDirection;
+            int newColumn = column + columnDirection;
+
+            if (IsValidCell(newRow, newColumn) && (boardMatrix[newRow, newColumn] == 0))
+            {
+                possibleMoves.Add(Tuple.Create((byte)newRow, (byte)newColumn));
+            }
+            else if (IsValidCell(newRow, newColumn) && (boardMatrix[newRow, newColumn] == opponentPiece || boardMatrix[newRow, newColumn] == opponentKing))
+            {
+                newRow += rowDirection;
+                newColumn += columnDirection;
+
+                if (IsValidCell(newRow, newColumn) && (boardMatrix[newRow, newColumn] == 0))
+                {
+                    possibleMoves.Add(Tuple.Create((byte)newRow, (byte)newColumn));
+                }
+            }
+        }
+
+        private bool IsValidCell(int row, int column)
+        {
+            return row >= 0 && row < NUMBER_OF_ROWS && column >= 0 && column < NUMBER_OF_COLUMNS;
+        }
+
         private void InitMatrix(byte option)
         {
             if (option == 0)
@@ -263,6 +103,7 @@ namespace Checkers.Viewmodels.Entities
             }
             else { throw new ArgumentException("Invalid board initialization option."); }
         }
+
         private void SmallestBoardInit()
         {
             for (int rowIndex = 0; rowIndex < NUMBER_OF_ROWS; rowIndex++)
@@ -324,6 +165,7 @@ namespace Checkers.Viewmodels.Entities
                 }
             }
         }
+
         private void FullBoardInit()
         {
             for (int rowIndex = 0; rowIndex < NUMBER_OF_ROWS; rowIndex++)
