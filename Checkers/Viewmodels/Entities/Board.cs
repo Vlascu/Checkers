@@ -42,7 +42,7 @@ namespace Checkers.Viewmodels.Entities
 
             return possibleMoves;
         }
-
+        
         private void AddKingMoves(byte row, byte column, byte opponentPiece, byte opponentKing, List<Tuple<byte, byte>> possibleMoves)
         {
             AddDiagonalMove(row, column, -1, -1, opponentPiece, opponentKing, possibleMoves);
@@ -99,7 +99,7 @@ namespace Checkers.Viewmodels.Entities
             }
             else if (option == 4)
             {
-
+                KingsBoardInit();
             }
             else { throw new ArgumentException("Invalid board initialization option."); }
         }
@@ -256,6 +256,33 @@ namespace Checkers.Viewmodels.Entities
                     }
                 }
             }
+        }
+
+        public void MovePiece(byte rowSource, byte columnSource, byte rowDest, byte columnDest)
+        {
+            byte movingPiece = boardMatrix[rowSource, columnSource];
+
+
+            if (Math.Abs(rowDest - rowSource) == 2 && Math.Abs(columnDest - columnSource) == 2)
+            {
+
+                byte rowDiag = (byte)((rowSource + rowDest) / 2);
+                byte colDiag = (byte)((columnSource + columnDest) / 2);
+
+                if (boardMatrix[rowDiag, colDiag] != 0)
+                {
+                    boardMatrix[rowDiag, colDiag] = 0;
+                }
+            }
+
+            boardMatrix[rowDest, columnDest] = movingPiece;
+
+            boardMatrix[rowSource, columnSource] = 0;
+        }
+
+        public byte GetPieceType(byte row, byte column)
+        {
+            return boardMatrix[row, column];
         }
     }
 }
