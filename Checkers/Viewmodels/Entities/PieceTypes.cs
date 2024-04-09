@@ -13,5 +13,8 @@ namespace Checkers.Viewmodels.Entities
         RED_PIECE = 2,
         WHITE_KING = 3,
         RED_KING = 4,
+
     }
+
+
 }

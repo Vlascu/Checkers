@@ -59,8 +59,16 @@ namespace Checkers.Viewmodels.Entities
 
         private void AddRegularPieceMoves(byte row, byte column, byte opponentPiece, List<Tuple<byte, byte>> possibleMoves)
         {
-            AddDiagonalMove(row, column, 1, -1, opponentPiece, 0, possibleMoves);
-            AddDiagonalMove(row, column, 1, 1, opponentPiece, 0, possibleMoves);
+            if(opponentPiece == (byte)PieceTypes.RED_PIECE)
+            {
+                AddDiagonalMove(row, column, 1, -1, opponentPiece, 0, possibleMoves);
+                AddDiagonalMove(row, column, 1, 1, opponentPiece, 0, possibleMoves);
+
+            } else if (opponentPiece == (byte)PieceTypes.WHITE_PIECE)
+            {
+                AddDiagonalMove(row, column, -1, -1, opponentPiece, 0, possibleMoves);
+                AddDiagonalMove(row, column, -1, 1, opponentPiece, 0, possibleMoves);
+            }
         }
 
         private void AddDiagonalMove(byte row, byte column, int rowDirection, int columnDirection, byte opponentPiece, byte opponentKing, List<Tuple<byte, byte>> possibleMoves)
@@ -103,7 +111,7 @@ namespace Checkers.Viewmodels.Entities
             {
                 FullBoardInit();
             }
-            else if (option == 4)
+            else if (option == 3)
             {
                 KingsBoardInit();
             }
@@ -296,7 +304,7 @@ namespace Checkers.Viewmodels.Entities
             {
                 boardMatrix[rowDest, columnDest] = movingPiece;
             }
-
+           
             boardMatrix[rowSource, columnSource] = EMPTY;
         }
 
