@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.RightsManagement;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -297,11 +298,13 @@ namespace Checkers.Viewmodels
             if (board.NumberOfRedPieces == 0)
             {
                 MessageBox.Show("Congrats, white player! You've won!");
+                SaveUserInfo("White");
             }
 
             if (board.NumberOfWhitePieces == 0)
             {
                 MessageBox.Show("Congrats, red player! You've won!");
+                SaveUserInfo("Red");
             }
 
             CanMovePiece = false;
@@ -397,6 +400,29 @@ namespace Checkers.Viewmodels
             {
                 MessageBox.Show(ex.Message + ex.StackTrace);
             }
+        }
+
+        private void SaveUserInfo(string user)
+        {
+            byte numberOfPiecesLeft = 0;
+
+            if(user == "White")
+            {
+                numberOfPiecesLeft = board.NumberOfWhitePieces;
+            } else if (user == "Red")
+            {
+                numberOfPiecesLeft = board.NumberOfRedPieces;
+            }
+
+            try {
+                JsonPersitence.SaveToJson(new Tuple<string, byte>(user, numberOfPiecesLeft), @"C:\\Users\\Vlascu\\Desktop\\Cursuri UNITBV\\ANUL 2\\Sem 2\\MAP\\Checkers\\Checkers\\Model\\winners.json");
+                MessageBox.Show("User info saved!");
+            } catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+           
+
         }
 
         private bool AreMatricesEqual(byte[,] matrix1, byte[,] matrix2)
