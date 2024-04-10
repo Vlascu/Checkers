@@ -21,9 +21,10 @@ namespace Checkers.Viewmodels
         public ObservableCollection<Cell> GridMatrix { get; set; }
         private Board board;
         private bool isBoardColored;
+        private bool multipleMoves;
+        private bool isRedMoving;
         private byte rowSourceIndex;
         private byte colSourceIndex;
-        private bool isRedMoving = true;
         private string movingPlayer;
 
         private ICommand getMovePositions;
@@ -44,6 +45,14 @@ namespace Checkers.Viewmodels
                     movingPlayer = value;
                     OnPropertyChanged(nameof(MovingPlayer));
                 }
+            }
+        }
+
+        public bool MultipleMoves
+        {
+            set
+            {
+                multipleMoves = value;
             }
         }
 
@@ -110,6 +119,8 @@ namespace Checkers.Viewmodels
             GridMatrix = new ObservableCollection<Cell>();
             isBoardColored = false;
             MovingPlayer = "Red player is moving";
+            isRedMoving = true;
+            multipleMoves = false;
 
             for (byte rowIndex = 0; rowIndex < 8; rowIndex++)
             {
@@ -129,7 +140,9 @@ namespace Checkers.Viewmodels
         {
             GridMatrix = new ObservableCollection<Cell>();
             isBoardColored = false;
-
+            MovingPlayer = "Red player is moving";
+            isRedMoving = true;
+            multipleMoves = false;
 
             for (byte rowIndex = 0; rowIndex < 8; rowIndex++)
             {
@@ -237,21 +250,9 @@ namespace Checkers.Viewmodels
 
             }
         }
-        private void MovePiece(Cell cell)
+
+        private void SetLabelWhoMoves()
         {
-            byte rowIndex = cell.RowIndex;
-            byte columnIndex = cell.ColumnIndex;
-
-            if (cell.Background.Color == Color.FromRgb(44, 171, 49))
-            {
-                board.MovePiece(rowSourceIndex, colSourceIndex, rowIndex, columnIndex);
-                UndoPositions();
-                RenderBoard();
-            }
-
-            CanMovePiece = false;
-            isRedMoving = !isRedMoving;
-
             if (isRedMoving)
             {
                 MovingPlayer = "Red player is moving";
@@ -261,6 +262,61 @@ namespace Checkers.Viewmodels
                 MovingPlayer = "White player is moving";
             }
         }
+
+        private void MovePiece(Cell cell)
+        {
+            byte rowIndex = cell.RowIndex;
+            byte columnIndex = cell.ColumnIndex;
+
+            byte beforeNumberOfWhites = board.NumberOfWhitePieces;
+            byte beforeNumberOfReds = board.NumberOfRedPieces;
+
+            if (cell.Background.Color == Color.FromRgb(44, 171, 49))
+            {
+                board.MovePiece(rowSourceIndex, colSourceIndex, rowIndex, columnIndex);
+                UndoPositions();
+                RenderBoard();
+            }
+
+            CanMovePiece = false;
+
+            if (multipleMoves)
+            {
+                bool canTakeOneMore = false;
+
+                if (beforeNumberOfReds != board.NumberOfRedPieces || beforeNumberOfWhites != board.NumberOfWhitePieces)
+                {
+                    var poses = board.GetAvailableMoves(rowIndex, columnIndex);
+                    canTakeOneMore = CheckCanTakeOneMore(poses, rowIndex, columnIndex);
+                }
+
+                if (!canTakeOneMore)
+                {
+                    isRedMoving = !isRedMoving;
+                }
+
+            }
+            else
+            {
+                isRedMoving = !isRedMoving;
+            }
+
+            SetLabelWhoMoves();
+
+        }
+
+        private bool CheckCanTakeOneMore(List<Tuple<byte, byte>> poses, byte rowIndex, byte columnIndex)
+        {
+            foreach (var item in poses)
+            {
+                if (Math.Abs(item.Item1 - rowIndex) == 2 && Math.Abs(item.Item2 - columnIndex) == 2)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void UndoPositions()
         {
 

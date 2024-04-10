@@ -20,6 +20,9 @@ namespace Checkers.Viewmodels.Entities
         private byte numberOfRedPieces;
         private byte numberOfWhitePieces;
 
+        public byte NumberOfRedPieces { get { return numberOfRedPieces; } }
+        public byte NumberOfWhitePieces { get { return numberOfWhitePieces; } }
+
         public Board(byte buildOption)
         {
             numberOfWhitePieces = 0;
@@ -59,12 +62,13 @@ namespace Checkers.Viewmodels.Entities
 
         private void AddRegularPieceMoves(byte row, byte column, byte opponentPiece, List<Tuple<byte, byte>> possibleMoves)
         {
-            if(opponentPiece == (byte)PieceTypes.RED_PIECE)
+            if (opponentPiece == (byte)PieceTypes.RED_PIECE)
             {
                 AddDiagonalMove(row, column, 1, -1, opponentPiece, 0, possibleMoves);
                 AddDiagonalMove(row, column, 1, 1, opponentPiece, 0, possibleMoves);
 
-            } else if (opponentPiece == (byte)PieceTypes.WHITE_PIECE)
+            }
+            else if (opponentPiece == (byte)PieceTypes.WHITE_PIECE)
             {
                 AddDiagonalMove(row, column, -1, -1, opponentPiece, 0, possibleMoves);
                 AddDiagonalMove(row, column, -1, 1, opponentPiece, 0, possibleMoves);
@@ -285,6 +289,15 @@ namespace Checkers.Viewmodels.Entities
 
                 if (boardMatrix[rowDiag, colDiag] != 0)
                 {
+                    if (boardMatrix[rowDiag, colDiag] == (byte)PieceTypes.WHITE_PIECE || boardMatrix[rowDiag, colDiag] == (byte)PieceTypes.WHITE_KING)
+                    {
+                        numberOfWhitePieces--;
+                    }
+                    else if (boardMatrix[rowDiag, colDiag] == (byte)PieceTypes.RED_PIECE || boardMatrix[rowDiag, colDiag] == (byte)PieceTypes.RED_KING)
+                    {
+                        numberOfRedPieces--;
+                    }
+
                     boardMatrix[rowDiag, colDiag] = EMPTY;
                 }
             }
@@ -304,7 +317,7 @@ namespace Checkers.Viewmodels.Entities
             {
                 boardMatrix[rowDest, columnDest] = movingPiece;
             }
-           
+
             boardMatrix[rowSource, columnSource] = EMPTY;
         }
 
@@ -312,5 +325,7 @@ namespace Checkers.Viewmodels.Entities
         {
             return boardMatrix[row, column];
         }
+
+       
     }
 }
