@@ -22,6 +22,11 @@ namespace Checkers.Viewmodels.Entities
 
         public byte NumberOfRedPieces { get { return numberOfRedPieces; } }
         public byte NumberOfWhitePieces { get { return numberOfWhitePieces; } }
+        public byte[,] BoardMatrix
+        {
+            get { return boardMatrix; }
+            set { this.boardMatrix = value; }
+        }
 
         public Board(byte buildOption)
         {
@@ -29,6 +34,15 @@ namespace Checkers.Viewmodels.Entities
             numberOfRedPieces = 0;
             boardMatrix = new byte[NUMBER_OF_ROWS, NUMBER_OF_COLUMNS];
             InitMatrix(buildOption);
+        }
+
+        public Board(byte[,] loadedBoard)
+        {
+            boardMatrix = new byte[NUMBER_OF_ROWS, NUMBER_OF_COLUMNS];
+            boardMatrix = loadedBoard;
+
+            numberOfWhitePieces = GetNumberOfWhitePices();
+            numberOfRedPieces = GetNumberOfRedPices();
         }
 
         public List<Tuple<byte, byte>> GetAvailableMoves(byte row, byte column)
@@ -326,6 +340,37 @@ namespace Checkers.Viewmodels.Entities
             return boardMatrix[row, column];
         }
 
-       
+        private byte GetNumberOfWhitePices()
+        {
+            byte counter = 0;
+            for (int rowIndex = 0; rowIndex < NUMBER_OF_ROWS; rowIndex++)
+            {
+                for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++)
+                {
+                    if (boardMatrix[rowIndex, columnIndex] == WHITE_KING || boardMatrix[rowIndex, columnIndex] == WHITE_PIECE)
+                    {
+                        counter++;
+                    }
+                }
+            }
+
+           return counter;
+        }
+        private byte GetNumberOfRedPices()
+        {
+            byte counter = 0;
+            for (int rowIndex = 0; rowIndex < NUMBER_OF_ROWS; rowIndex++)
+            {
+                for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++)
+                {
+                    if (boardMatrix[rowIndex, columnIndex] == RED_KING || boardMatrix[rowIndex, columnIndex] == RED_PIECE)
+                    {
+                        counter++;
+                    }
+                }
+            }
+
+            return counter;
+        }
     }
 }

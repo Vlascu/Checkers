@@ -8,16 +8,19 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Media.Media3D;
+using Tema1_Dictionar;
 
 
 namespace Checkers.Viewmodels
 {
     public class GameVM : INotifyPropertyChanged
     {
-        public static byte defaultOption = 2;
+        private static byte defaultOption = 2;
         public ObservableCollection<Cell> GridMatrix { get; set; }
         private Board board;
         private bool isBoardColored;
@@ -30,10 +33,12 @@ namespace Checkers.Viewmodels
         private ICommand getMovePositions;
         private ICommand undoMovePositions;
         private ICommand movePieceCommand;
+        private ICommand saveGame;
 
         public bool CanGetPositions { get; set; } = true;
         public bool CanExecuteUndo { get; set; } = false;
         public bool CanMovePiece { get; set; } = false;
+        public byte DefaultOption { get; set; }
 
         public string MovingPlayer
         {
@@ -55,7 +60,18 @@ namespace Checkers.Viewmodels
                 multipleMoves = value;
             }
         }
-
+        public ICommand SaveGame
+        {
+            get
+            {
+                if (saveGame == null)
+                {
+                    saveGame = new ParameterlessRelayCommand(SaveCurrentGame, param => true);
+                }
+                return saveGame;
+            }
+            set { saveGame = value; }
+        }
         public ICommand MoveOrGetPositions
         {
             get
@@ -136,7 +152,8 @@ namespace Checkers.Viewmodels
             }
             InitBoardAndGrid(defaultOption);
         }
-        public GameVM(byte option)
+
+        public GameVM(byte[,] board)
         {
             GridMatrix = new ObservableCollection<Cell>();
             isBoardColored = false;
@@ -156,12 +173,20 @@ namespace Checkers.Viewmodels
                     GridMatrix.Add(cell);
                 }
             }
-            InitBoardAndGrid(option);
+            InitBoardAndGrid(board);
         }
 
         private void InitBoardAndGrid(byte option)
         {
             board = new Board(option);
+
+            RenderBoard();
+            isBoardColored = true;
+        }
+
+        private void InitBoardAndGrid(byte[,] loadedBoard)
+        {
+            board = new Board(loadedBoard);
 
             RenderBoard();
             isBoardColored = true;
@@ -206,12 +231,6 @@ namespace Checkers.Viewmodels
                     new SolidColorBrush(Color.FromArgb(255, 201, 144, 38));
             }
         }
-
-        public byte DefaultOption
-        {
-            set { defaultOption = value; }
-        }
-
 
         private void GetAvailablePositions(Cell cell)
         {
@@ -343,6 +362,56 @@ namespace Checkers.Viewmodels
             }
 
             CanGetPositions = true;
+        }
+
+        private void SaveCurrentGame()
+        {
+            try
+            {
+                List<byte[,]> allGames = JsonPersitence.LoadFromJson<byte[,]>(@"C:\\Users\\Vlascu\\Desktop\\Cursuri UNITBV\\ANUL 2\\Sem 2\\MAP\\Checkers\\Checkers\\Model\\games.json");
+
+                if (allGames != null)
+                {
+                    bool matrixEquals = allGames.Any(existingMatrix => AreMatricesEqual(existingMatrix, board.BoardMatrix));
+
+                    if (matrixEquals)
+                    {
+                        MessageBox.Show("Can't save an already existing game configuration");
+                        return;
+                    }
+                }
+
+                JsonPersitence.SaveToJson(board.BoardMatrix, @"C:\\Users\\Vlascu\\Desktop\\Cursuri UNITBV\\ANUL 2\\Sem 2\\MAP\\Checkers\\Checkers\\Model\\games.json");
+
+                MessageBox.Show("Current game saved succesfully!");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + ex.StackTrace);
+            }
+        }
+
+        private bool AreMatricesEqual(byte[,] matrix1, byte[,] matrix2)
+        {
+            if (matrix1.GetLength(0) != matrix2.GetLength(0) ||
+                matrix1.GetLength(1) != matrix2.GetLength(1))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < matrix1.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix1.GetLength(1); j++)
+                {
+                    if (matrix1[i, j] != matrix2[i, j])
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true; 
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
