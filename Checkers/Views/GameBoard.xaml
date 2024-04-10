@@ -8,8 +8,8 @@
         xmlns:behavior="clr-namespace:AttachedCommandBehavior;assembly=AttachedCommandBehavior"
         xmlns:viewmodels = "clr-namespace:Checkers.Viewmodels"
         xmlns:utils = "clr-namespace:Checkers.Utils"
-        Title="GameBoard" Height="450" Width="800"
-        
+        Title="GameBoard"
+        WindowState="Maximized"
         behavior:CommandBehavior.Command="{Binding UndoMovePositions}"
         behavior:CommandBehavior.Event="PreviewMouseRightButtonDown" 
         >
@@ -64,24 +64,24 @@
                     <ItemsPanelTemplate>
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
 
                             </Grid.ColumnDefinitions>
                         </Grid>
@@ -91,8 +91,8 @@
                     <DataTemplate>
                         <Border Background="{Binding Background}">
                             <Button Template="{StaticResource ImageButtonTemplate}" IsEnabled="{Binding IsEnabled}"
-            Command="{Binding DataContext.MoveOrGetPositions, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-            CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}">
+                            Command="{Binding DataContext.MoveOrGetPositions, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                            CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}">
 
                             </Button>
                         </Border>

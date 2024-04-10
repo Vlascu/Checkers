@@ -5,9 +5,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -20,7 +17,7 @@ namespace Checkers.Viewmodels
 {
     public class GameVM : INotifyPropertyChanged
     {
-        private static byte defaultOption = 2;
+        private static byte defaultOption = 0;
         public ObservableCollection<Cell> GridMatrix { get; set; }
         private Board board;
         private bool isBoardColored;
@@ -201,7 +198,7 @@ namespace Checkers.Viewmodels
                 if (pieceType == (byte)PieceTypes.EMPTY)
                 {
                     cell.IsEnabled = false;
-                    cell.Image = null;
+                    cell.Image = PieceBuilder.GetPieceImage(6);
                 }
                 else
                 {
@@ -295,6 +292,16 @@ namespace Checkers.Viewmodels
                 board.MovePiece(rowSourceIndex, colSourceIndex, rowIndex, columnIndex);
                 UndoPositions();
                 RenderBoard();
+            }
+
+            if (board.NumberOfRedPieces == 0)
+            {
+                MessageBox.Show("Congrats, white player! You've won!");
+            }
+
+            if (board.NumberOfWhitePieces == 0)
+            {
+                MessageBox.Show("Congrats, red player! You've won!");
             }
 
             CanMovePiece = false;
@@ -411,7 +418,7 @@ namespace Checkers.Viewmodels
                 }
             }
 
-            return true; 
+            return true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
