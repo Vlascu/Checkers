@@ -1,5 +1,6 @@
 ﻿using Checkers.Viewmodels.Entities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -54,6 +55,31 @@ namespace Checkers.Utils
                 bitmapImage.EndInit();
                 return bitmapImage;
             }
+        }
+
+        public static bool AreBitmapsEqual(BitmapImage bitmap1, BitmapImage bitmap2)
+        {
+            if (bitmap1 == null || bitmap2 == null)
+                return false;
+
+
+            byte[] bitmapBytes1, bitmapBytes2;
+            using (var stream1 = new MemoryStream())
+            {
+                BitmapEncoder encoder1 = new PngBitmapEncoder();
+                encoder1.Frames.Add(BitmapFrame.Create(bitmap1));
+                encoder1.Save(stream1);
+                bitmapBytes1 = stream1.ToArray();
+            }
+            using (var stream2 = new MemoryStream())
+            {
+                BitmapEncoder encoder2 = new PngBitmapEncoder();
+                encoder2.Frames.Add(BitmapFrame.Create(bitmap2));
+                encoder2.Save(stream2);
+                bitmapBytes2 = stream2.ToArray();
+            }
+
+            return StructuralComparisons.StructuralEqualityComparer.Equals(bitmapBytes1, bitmapBytes2);
         }
     }
 }

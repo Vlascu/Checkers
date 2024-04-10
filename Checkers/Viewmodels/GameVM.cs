@@ -3,16 +3,19 @@ using Checkers.Viewmodels.Entities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 
 namespace Checkers.Viewmodels
 {
-    public class GameVM
+    public class GameVM : INotifyPropertyChanged
     {
         public static byte defaultOption = 2;
         public ObservableCollection<Cell> GridMatrix { get; set; }
@@ -20,6 +23,8 @@ namespace Checkers.Viewmodels
         private bool isBoardColored;
         private byte rowSourceIndex;
         private byte colSourceIndex;
+        private bool isRedMoving = true;
+        private string movingPlayer;
 
         private ICommand getMovePositions;
         private ICommand undoMovePositions;
@@ -28,6 +33,19 @@ namespace Checkers.Viewmodels
         public bool CanGetPositions { get; set; } = true;
         public bool CanExecuteUndo { get; set; } = false;
         public bool CanMovePiece { get; set; } = false;
+
+        public string MovingPlayer
+        {
+            get { return movingPlayer; }
+            set
+            {
+                if (movingPlayer != value)
+                {
+                    movingPlayer = value;
+                    OnPropertyChanged(nameof(MovingPlayer));
+                }
+            }
+        }
 
         public ICommand MoveOrGetPositions
         {
@@ -91,6 +109,7 @@ namespace Checkers.Viewmodels
         {
             GridMatrix = new ObservableCollection<Cell>();
             isBoardColored = false;
+            MovingPlayer = "Red player is moving";
 
             for (byte rowIndex = 0; rowIndex < 8; rowIndex++)
             {
@@ -183,32 +202,41 @@ namespace Checkers.Viewmodels
 
         private void GetAvailablePositions(Cell cell)
         {
-            byte rowIndex = cell.RowIndex;
-            byte columnIndex = cell.ColumnIndex;
-
-            rowSourceIndex = rowIndex;
-            colSourceIndex = columnIndex;
-
-            var availablePositions = board.GetAvailableMoves(rowIndex, columnIndex);
-
-            if (availablePositions.Count != 0)
+            if ((isRedMoving &&
+                (PieceBuilder.AreBitmapsEqual((BitmapImage)cell.Image, PieceBuilder.GetPieceImage((byte)PieceTypes.RED_PIECE))
+                || PieceBuilder.AreBitmapsEqual((BitmapImage)cell.Image, PieceBuilder.GetPieceImage((byte)PieceTypes.RED_KING))))
+                || (!isRedMoving && ((PieceBuilder.AreBitmapsEqual((BitmapImage)cell.Image, PieceBuilder.GetPieceImage((byte)PieceTypes.WHITE_PIECE))
+                || PieceBuilder.AreBitmapsEqual((BitmapImage)cell.Image, PieceBuilder.GetPieceImage((byte)PieceTypes.WHITE_KING))))))
             {
-                foreach (var move in availablePositions)
                 {
-                    foreach (Cell cellItem in GridMatrix.Where(x => x.RowIndex == move.Item1 && x.ColumnIndex == move.Item2))
-                    {
-                        cellItem.Background = new SolidColorBrush(Color.FromRgb(44, 171, 49));
-                        cellItem.IsEnabled = true;
-                        cellItem.Image = PieceBuilder.GetPieceImage(5);
+                    byte rowIndex = cell.RowIndex;
+                    byte columnIndex = cell.ColumnIndex;
 
-                        CanGetPositions = false;
-                        CanExecuteUndo = true;
-                        CanMovePiece = true;
+                    rowSourceIndex = rowIndex;
+                    colSourceIndex = columnIndex;
+
+                    var availablePositions = board.GetAvailableMoves(rowIndex, columnIndex);
+
+                    if (availablePositions.Count != 0)
+                    {
+                        foreach (var move in availablePositions)
+                        {
+                            foreach (Cell cellItem in GridMatrix.Where(x => x.RowIndex == move.Item1 && x.ColumnIndex == move.Item2))
+                            {
+                                cellItem.Background = new SolidColorBrush(Color.FromRgb(44, 171, 49));
+                                cellItem.IsEnabled = true;
+                                cellItem.Image = PieceBuilder.GetPieceImage(5);
+
+                                CanGetPositions = false;
+                                CanExecuteUndo = true;
+                                CanMovePiece = true;
+                            }
+                        }
                     }
                 }
+
             }
         }
-
         private void MovePiece(Cell cell)
         {
             byte rowIndex = cell.RowIndex;
@@ -222,6 +250,16 @@ namespace Checkers.Viewmodels
             }
 
             CanMovePiece = false;
+            isRedMoving = !isRedMoving;
+
+            if (isRedMoving)
+            {
+                MovingPlayer = "Red player is moving";
+            }
+            else
+            {
+                MovingPlayer = "White player is moving";
+            }
         }
         private void UndoPositions()
         {
@@ -245,11 +283,19 @@ namespace Checkers.Viewmodels
                     cell.IsEnabled = false;
                     cell.Image = null;
                 }
-                
+
             }
 
             CanGetPositions = true;
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }
+
