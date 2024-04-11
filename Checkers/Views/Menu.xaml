@@ -22,7 +22,7 @@
             <Button Content="Load" FontSize="20" Width="150" Height="40" Margin="0,0,0,20" Command="{Binding LoadNewGame}"/>
             <Button Content="Settings" FontSize="20" Width="150" Height="40" Margin="0,0,0,20" Command="{Binding OpenSettings}"/>
             <Button Content="Statistics" FontSize="20" Width="150" Height="40" Margin="0,0,0,20" Command="{Binding OpenStatistics}"/>
-            <Button Content="About" FontSize="20" Width="150" Height="40" Margin="0,0,0,30"/>
+            <Button Content="About" FontSize="20" Width="150" Height="40" Margin="0,0,0,30" Command="{Binding OpenAbout}"/>
         </StackPanel>
     </Grid>
 </Window>

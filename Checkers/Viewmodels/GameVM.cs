@@ -71,7 +71,7 @@ namespace Checkers.Viewmodels
         {
             get
             {
-                if(exitGame == null)
+                if (exitGame == null)
                 {
                     exitGame = new ParameterlessRelayCommand(GoToMenu, param => true);
                 }
@@ -427,22 +427,25 @@ namespace Checkers.Viewmodels
         {
             byte numberOfPiecesLeft = 0;
 
-            if(user == "White")
+            if (user == "White")
             {
                 numberOfPiecesLeft = board.NumberOfWhitePieces;
-            } else if (user == "Red")
+            }
+            else if (user == "Red")
             {
                 numberOfPiecesLeft = board.NumberOfRedPieces;
             }
 
-            try {
+            try
+            {
                 JsonPersitence.SaveToJson(new Tuple<string, byte>(user, numberOfPiecesLeft), @"C:\\Users\\Vlascu\\Desktop\\Cursuri UNITBV\\ANUL 2\\Sem 2\\MAP\\Checkers\\Checkers\\Model\\winners.json");
                 MessageBox.Show("User info saved!");
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
-           
+
 
         }
 
@@ -452,7 +455,7 @@ namespace Checkers.Viewmodels
             currentWindow.Close();
             menu.ShowDialog();
         }
-        
+
         private bool AreMatricesEqual(byte[,] matrix1, byte[,] matrix2)
         {
             if (matrix1.GetLength(0) != matrix2.GetLength(0) ||

@@ -19,6 +19,23 @@ namespace Checkers.Viewmodels
         private ICommand loadNewGame;
         private ICommand openSettings;
         private ICommand openStatistics;
+        private ICommand openAbout;
+
+        public ICommand OpenAbout
+        {
+            get
+            {
+                if (openAbout == null)
+                {
+                    openAbout = new ParameterlessRelayCommand(GoToAbout, param => true);
+                }
+                return openAbout;
+            }
+            set
+            {
+                openAbout = value;
+            }
+        }
 
         public ICommand OpenStatistics
         {
@@ -125,6 +142,13 @@ namespace Checkers.Viewmodels
             menuWindow.Close();
             statistics.ShowDialog();
 
+        }
+
+        private void GoToAbout()
+        {
+            About about = new About();
+            menuWindow.Close();
+            about.ShowDialog();
         }
     }
 }
