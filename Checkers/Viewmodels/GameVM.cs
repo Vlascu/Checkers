@@ -40,6 +40,17 @@ namespace Checkers.Viewmodels
         public bool CanExecuteUndo { get; set; } = false;
         public bool CanMovePiece { get; set; } = false;
         public byte DefaultOption { get; set; }
+        public bool IsRedMoving
+        {
+            get
+            {
+                return isRedMoving;
+            }
+            set
+            {
+                isRedMoving = value;
+            }
+        }
 
         public string MovingPlayer
         {
@@ -153,9 +164,9 @@ namespace Checkers.Viewmodels
         {
             GridMatrix = new ObservableCollection<Cell>();
             isBoardColored = false;
-            MovingPlayer = "Red player is moving";
             isRedMoving = true;
             multipleMoves = false;
+            SetLabelWhoMoves();
 
             for (byte rowIndex = 0; rowIndex < 8; rowIndex++)
             {
@@ -176,9 +187,9 @@ namespace Checkers.Viewmodels
         {
             GridMatrix = new ObservableCollection<Cell>();
             isBoardColored = false;
-            MovingPlayer = "Red player is moving";
             isRedMoving = true;
             multipleMoves = settings.MultipleMoves;
+            SetLabelWhoMoves();
 
             for (byte rowIndex = 0; rowIndex < 8; rowIndex++)
             {
@@ -289,7 +300,7 @@ namespace Checkers.Viewmodels
             }
         }
 
-        private void SetLabelWhoMoves()
+        public void SetLabelWhoMoves()
         {
             if (isRedMoving)
             {
@@ -399,11 +410,11 @@ namespace Checkers.Viewmodels
         {
             try
             {
-                List<byte[,]> allGames = JsonPersitence.LoadFromJson<byte[,]>(@"C:\\Users\\Vlascu\\Desktop\\Cursuri UNITBV\\ANUL 2\\Sem 2\\MAP\\Checkers\\Checkers\\Model\\games.json");
+                List<Tuple<byte[,], bool>> allGames = JsonPersitence.LoadFromJson<Tuple<byte[,], bool>>(@"C:\\Users\\Vlascu\\Desktop\\Cursuri UNITBV\\ANUL 2\\Sem 2\\MAP\\Checkers\\Checkers\\Model\\games.json");
 
                 if (allGames != null)
                 {
-                    bool matrixEquals = allGames.Any(existingMatrix => AreMatricesEqual(existingMatrix, board.BoardMatrix));
+                    bool matrixEquals = allGames.Any(pair => AreMatricesEqual(pair.Item1, board.BoardMatrix));
 
                     if (matrixEquals)
                     {
@@ -412,7 +423,7 @@ namespace Checkers.Viewmodels
                     }
                 }
 
-                JsonPersitence.SaveToJson(board.BoardMatrix, @"C:\\Users\\Vlascu\\Desktop\\Cursuri UNITBV\\ANUL 2\\Sem 2\\MAP\\Checkers\\Checkers\\Model\\games.json");
+                JsonPersitence.SaveToJson(new Tuple<byte[,], bool>(board.BoardMatrix, this.isRedMoving), @"C:\\Users\\Vlascu\\Desktop\\Cursuri UNITBV\\ANUL 2\\Sem 2\\MAP\\Checkers\\Checkers\\Model\\games.json");
 
                 MessageBox.Show("Current game saved succesfully!");
 

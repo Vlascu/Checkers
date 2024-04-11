@@ -15,12 +15,12 @@ namespace Checkers.Viewmodels
 {
     public class LoadVM
     {
-        private List<byte[,]> boards;
-        private List<Tuple<byte[,], string>> listItems;
+        private List<Tuple<byte[,], bool>> boards;
+        private List<Tuple<byte[,], string, bool>> listItems;
         private Window currentWindow;
 
         private ICommand startGame;
-        public List<Tuple<byte[,], string>> ListItems { get { return listItems; } }
+        public List<Tuple<byte[,], string, bool>> ListItems { get { return listItems; } }
 
         public ICommand StartGame
         {
@@ -41,8 +41,8 @@ namespace Checkers.Viewmodels
         public LoadVM(Window window)
         {
             this.currentWindow = window;
-            listItems = new List<Tuple<byte[,], string>>();
-            boards = JsonPersitence.LoadFromJson<byte[,]>(@"C:\Users\Vlascu\Desktop\Cursuri UNITBV\ANUL 2\Sem 2\MAP\Checkers\Checkers\Model\games.json");
+            listItems = new List<Tuple<byte[,], string, bool>>();
+            boards = JsonPersitence.LoadFromJson<Tuple<byte[,], bool>>(@"C:\Users\Vlascu\Desktop\Cursuri UNITBV\ANUL 2\Sem 2\MAP\Checkers\Checkers\Model\games.json");
             InitListItems();
         }
 
@@ -53,7 +53,7 @@ namespace Checkers.Viewmodels
             {
                 foreach (var board in boards)
                 {
-                    listItems.Add(new Tuple<byte[,], string>(board, "Game " + counter));
+                    listItems.Add(new Tuple<byte[,], string, bool>(board.Item1, "Game " + counter, board.Item2));
                     counter++;
                 }
             }
@@ -69,6 +69,9 @@ namespace Checkers.Viewmodels
                     settings.LoadBoard = games.Item1;
 
                     GameVM gameVM = new GameVM(settings);
+                    gameVM.IsRedMoving = games.Item3;
+                    gameVM.SetLabelWhoMoves();
+
                     GameBoard board = new GameBoard(gameVM);
                     currentWindow.Close();
 

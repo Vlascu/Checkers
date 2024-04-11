@@ -18,6 +18,46 @@
         <viewmodels:GameVM/>
     </Window.DataContext>
 
+    <Window.Resources>
+        <Style x:Key="CustomStackPanelStyle" TargetType="StackPanel">
+            <Setter Property="Background" Value="#FCD78B"/>
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="15" Color="Black" Opacity="0.5" BlurRadius="15" Direction="270"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#a14010"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="10" Color="Black" Opacity="0.5" BlurRadius="10" Direction="270"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="12" Background= "#a14010">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#de8e66"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -32,12 +72,12 @@
         
         
         <StackPanel Grid.Column="2">
-            <Button Name="SaveGame" Content="Save Game" FontSize="15" Height="35" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"
+            <Button Style="{StaticResource CustomButtonStyle}" Name="SaveGame" Content="Save Game" FontSize="15" Height="35" HorizontalAlignment="Right" Width="80" VerticalAlignment="Top"
             Margin="0,20,20,0"
             Command="{Binding SaveGame}"/>
 
-            <Button Name="ExitGame" Content="Exit Game" FontSize="10" Height="20" Width="50" HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                    Margin="0,700,20,0" Background="#940a00" Foreground="White" Command="{Binding ExitGame}"/>
+            <Button Style="{StaticResource CustomButtonStyle}" Name="ExitGame" Content="Exit Game" FontSize="10" Height="35" Width="80" HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                    Margin="0,700,20,50" Foreground="White" Command="{Binding ExitGame}"/>
         </StackPanel>
          
         <Grid Grid.Column="1" Margin="0,20,0,20" HorizontalAlignment="Center" >
