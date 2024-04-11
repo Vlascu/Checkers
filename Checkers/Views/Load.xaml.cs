@@ -16,24 +16,14 @@ using Checkers.Viewmodels;
 namespace Checkers.Views
 {
     /// <summary>
-    /// Interaction logic for GameBoard.xaml
+    /// Interaction logic for Load.xaml
     /// </summary>
-    public partial class GameBoard : Window
+    public partial class Load : Window
     {
-        private GameVM gameVM;
-        public GameBoard(GameVM gameVM)
+        public Load()
         {
             InitializeComponent();
-            this.gameVM = gameVM;
-            this.gameVM.CurrentWindow = this;
-            DataContext = gameVM;
+            DataContext = new LoadVM(this);
         }
-
-        public GameBoard()
-        {
-            InitializeComponent();
-            DataContext = new GameVM();
-        }
-
     }
 }

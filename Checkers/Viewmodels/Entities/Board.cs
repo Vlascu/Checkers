@@ -372,5 +372,54 @@ namespace Checkers.Viewmodels.Entities
 
             return counter;
         }
+        public static byte[,] GetDefaultBoard()
+        {
+            byte[,] defaultBoard = new byte[NUMBER_OF_ROWS, NUMBER_OF_COLUMNS];
+
+            for (int rowIndex = 0; rowIndex < NUMBER_OF_ROWS; rowIndex++)
+            {
+                for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++)
+                {
+                    if (rowIndex == 0 && columnIndex % 2 == 1)
+                    {
+                        defaultBoard[rowIndex, columnIndex] = WHITE_PIECE;
+                       
+                    }
+                    else if (rowIndex == 1 && columnIndex % 2 == 0)
+                    {
+                        defaultBoard[rowIndex, columnIndex] = WHITE_PIECE;
+                       
+                    }
+                    else if (rowIndex == 2 && columnIndex % 2 == 1)
+                    {
+                        defaultBoard[rowIndex, columnIndex] = WHITE_PIECE;
+                       
+                    }
+
+                    else if (rowIndex == NUMBER_OF_ROWS - 1 && columnIndex % 2 == 0)
+                    {
+                        defaultBoard[rowIndex, columnIndex] = RED_PIECE;
+                        
+                    }
+                    else if (rowIndex == NUMBER_OF_ROWS - 2 && columnIndex % 2 == 1)
+                    {
+                        defaultBoard[rowIndex, columnIndex] = RED_PIECE;
+                        
+                    }
+                    else if (rowIndex == NUMBER_OF_ROWS - 3 && columnIndex % 2 == 0)
+                    {
+                        defaultBoard[rowIndex, columnIndex] = RED_PIECE;
+                        
+                    }
+
+                    else
+                    {
+                        defaultBoard[rowIndex, columnIndex] = EMPTY;
+                    }
+                }
+            }
+            return defaultBoard;
+        }
+
     }
 }

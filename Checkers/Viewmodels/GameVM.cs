@@ -1,5 +1,6 @@
 ﻿using Checkers.Utils;
 using Checkers.Viewmodels.Entities;
+using Checkers.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,7 +19,7 @@ namespace Checkers.Viewmodels
 {
     public class GameVM : INotifyPropertyChanged
     {
-        private static byte defaultOption = 0;
+        private static byte defaultOption = 2;
         public ObservableCollection<Cell> GridMatrix { get; set; }
         private Board board;
         private bool isBoardColored;
@@ -27,11 +28,13 @@ namespace Checkers.Viewmodels
         private byte rowSourceIndex;
         private byte colSourceIndex;
         private string movingPlayer;
+        private Window currentWindow;
 
         private ICommand getMovePositions;
         private ICommand undoMovePositions;
         private ICommand movePieceCommand;
         private ICommand saveGame;
+        private ICommand exitGame;
 
         public bool CanGetPositions { get; set; } = true;
         public bool CanExecuteUndo { get; set; } = false;
@@ -51,12 +54,30 @@ namespace Checkers.Viewmodels
             }
         }
 
+        public Window CurrentWindow
+        {
+            get { return currentWindow; }
+            set { currentWindow = value; }
+        }
+
         public bool MultipleMoves
         {
             set
             {
                 multipleMoves = value;
             }
+        }
+        public ICommand ExitGame
+        {
+            get
+            {
+                if(exitGame == null)
+                {
+                    exitGame = new ParameterlessRelayCommand(GoToMenu, param => true);
+                }
+                return exitGame;
+            }
+            set { exitGame = value; }
         }
         public ICommand SaveGame
         {
@@ -151,13 +172,13 @@ namespace Checkers.Viewmodels
             InitBoardAndGrid(defaultOption);
         }
 
-        public GameVM(byte[,] board)
+        public GameVM(GameSettings settings)
         {
             GridMatrix = new ObservableCollection<Cell>();
             isBoardColored = false;
             MovingPlayer = "Red player is moving";
             isRedMoving = true;
-            multipleMoves = false;
+            multipleMoves = settings.MultipleMoves;
 
             for (byte rowIndex = 0; rowIndex < 8; rowIndex++)
             {
@@ -171,7 +192,7 @@ namespace Checkers.Viewmodels
                     GridMatrix.Add(cell);
                 }
             }
-            InitBoardAndGrid(board);
+            InitBoardAndGrid(settings.LoadBoard);
         }
 
         private void InitBoardAndGrid(byte option)
@@ -425,6 +446,13 @@ namespace Checkers.Viewmodels
 
         }
 
+        private void GoToMenu()
+        {
+            Menu menu = new Menu();
+            currentWindow.Close();
+            menu.ShowDialog();
+        }
+        
         private bool AreMatricesEqual(byte[,] matrix1, byte[,] matrix2)
         {
             if (matrix1.GetLength(0) != matrix2.GetLength(0) ||
