@@ -64,14 +64,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Viewmodels\Entities\BoardTypes.cs" />
     <Compile Include="Viewmodels\Entities\GameSettings.cs" />
     <Compile Include="Viewmodels\LoadVM.cs" />
     <Compile Include="Viewmodels\MenuVM.cs" />
+    <Compile Include="Viewmodels\SettingsVM.cs" />
+    <Compile Include="Viewmodels\StatisticsVM.cs" />
     <Compile Include="Views\Load.xaml.cs">
       <DependentUpon>Load.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Statistics.xaml.cs">
+      <DependentUpon>Statistics.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\GameBoard.xaml">
       <SubType>Designer</SubType>
@@ -97,6 +106,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Statistics.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

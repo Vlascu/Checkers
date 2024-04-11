@@ -20,7 +20,6 @@ namespace Checkers.Viewmodels
         private Window currentWindow;
 
         private ICommand startGame;
-
         public List<Tuple<byte[,], string>> ListItems { get { return listItems; } }
 
         public ICommand StartGame
@@ -38,7 +37,7 @@ namespace Checkers.Viewmodels
                 startGame = value;
             }
         }
-
+  
         public LoadVM(Window window)
         {
             this.currentWindow = window;

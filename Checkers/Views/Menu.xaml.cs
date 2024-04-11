@@ -1,4 +1,5 @@
 ﻿using Checkers.Viewmodels;
+using Checkers.Viewmodels.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,12 @@ namespace Checkers.Views
         {
             InitializeComponent();
             DataContext = vm;
+        }
+
+        public Menu(GameSettings settings)
+        {
+            InitializeComponent();
+            DataContext = new MenuVM(this, settings);
         }
     }
 }

@@ -138,6 +138,7 @@ namespace Checkers.Viewmodels.Entities
 
         private void SmallestBoardInit()
         {
+           
             for (int rowIndex = 0; rowIndex < NUMBER_OF_ROWS; rowIndex++)
             {
                 for (int columnIndex = 0; columnIndex < NUMBER_OF_COLUMNS; columnIndex++)
@@ -160,6 +161,8 @@ namespace Checkers.Viewmodels.Entities
                     }
                 }
             }
+
+           
         }
 
         private void MediumBoardInit()
