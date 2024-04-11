@@ -331,12 +331,14 @@ namespace Checkers.Viewmodels
             {
                 MessageBox.Show("Congrats, white player! You've won!");
                 SaveUserInfo("White");
+                GoToMenu();
             }
 
             if (board.NumberOfWhitePieces == 0)
             {
                 MessageBox.Show("Congrats, red player! You've won!");
                 SaveUserInfo("Red");
+                GoToMenu();
             }
 
             CanMovePiece = false;
